@@ -8,6 +8,7 @@ keep_md: true
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
 ```
 
 ## Data Introduction
@@ -39,7 +40,7 @@ zipF<- "activity.zip"
 library(readr)
 dataF<-"activity.csv"
         activity<-read_csv(dataF)
-
+        
 str(activity)                
 ```
 
@@ -63,8 +64,8 @@ with(hist1, hist(s_steps))
 2. Calculate and report the **mean** and **median** total number of steps taken per day
 
 ```{r central_s_steps}
-meanssteps <- mean(hist1$s_steps)
-medianssteps <- median(hist1$s_steps)
+meanssteps <- round(mean(hist1$s_steps),2)
+medianssteps <- round(median(hist1$s_steps),2)
 
 ```
 
@@ -112,19 +113,48 @@ The total number of missing values in the dataset is `r na` which represents a
 For filling the missing values I will use the mean for that 5-minute interval in all days
 
 3. Create a new dataset that is equal to the original dataset but with the missing data filled in.
-```{r}
+```{r noMissings}
 
+plot1<-as.data.frame(plot1)
+activity2<-as.data.frame(activity)
+for (i in seq(1:nrow(activity2))){
+        if (activity2[i,4]==TRUE){
+                activity2[i,1]=plot1[plot1$interval==activity2[i,3],2]
+        }
+}
+
+newna <- sum(is.na(activity2$steps))
 ```
+
+In the new dataset **activity2** total na are `r newna`.
 
 4. Make a histogram of the total number of steps taken each day and Calculate and report the **mean** and **median** total number of steps taken per day. 
-```{r}
+```{r daylysteps}
+hist2<-activity2 %>% group_by(date) %>% summarise(s_steps=sum(steps,na.rm=T))
+with(hist2, hist(s_steps))
+meanssteps2 <- round(mean(hist2$s_steps),2)
+medianssteps2 <- round(median(hist2$s_steps),2)
 
 ```
 
+The mean of total number of steps taken per day is now `r meanssteps2` while the median of
+steps are now `r medianssteps2`
 
-Do these values differ from the estimates from the first part of the assignment? 
-What is the impact of imputing missing data on the estimates of the total daily number of steps?
+*Do these values differ from the estimates from the first part of the assignment? *
 
+```{r comparing_central}
+with_na <- c(mean=meanssteps, median = medianssteps)
+without_na <- c(mean=meanssteps2, median = medianssteps2)
+
+table<-cbind(with_na,without_na)
+table
+
+```
+ Both, mean and median have increase to the same value `r meanssteps2` 
+
+*What is the impact of imputing missing data on the estimates of the total daily number of steps?*
+
+The distribution of steps by day is now more simetric and the mean and median are equal 
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
