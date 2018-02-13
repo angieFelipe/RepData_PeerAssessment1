@@ -397,8 +397,18 @@ ggplot(plot1,aes(x=interval,y=a_steps) )+
 <section id="imputing-missing-values" class="level2">
 <h2>Imputing missing values</h2>
 <ol type="1">
-<li><p>Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with <code>NA</code>s)</p></li>
-<li><p>Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.</p></li>
+<li>Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with <code>NA</code>s)</li>
+</ol>
+<p>Ther are only missing values in the variable steps.</p>
+<pre class="r"><code>activity$na &lt;- is.na(activity$steps)
+na &lt;- sum(activity$na)
+pct &lt;- round(mean(activity$na)*100,2)</code></pre>
+<p>The total number of missing values in the dataset is 2304 which represents a 13.11 % of total observations.</p>
+<ol start="2" type="1">
+<li>Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.</li>
+</ol>
+<p>For filling the missing values I will use the mean for that 5-minute interval in all days</p>
+<ol start="3" type="1">
 <li><p>Create a new dataset that is equal to the original dataset but with the missing data filled in.</p></li>
 <li><p>Make a histogram of the total number of steps taken each day and Calculate and report the <strong>mean</strong> and <strong>median</strong> total number of steps taken per day.</p></li>
 </ol>
