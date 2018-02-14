@@ -159,13 +159,33 @@ The distribution of steps by day is now more simetric and the mean and median ar
 ## Are there differences in activity patterns between weekdays and weekends?
 
 1. Create a new factor variable in the dataset with two levels -- "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.
-```{r}
+```{r week}
+activity2$wd<-weekdays(activity2$date)
+wend <- unique(weekdays(activity2$date))[6:7]
 
+for (i in seq(1:nrow(activity2))){
+        if (activity2[i,5] %in% wend){
+                activity2[i,5]="weekend"
+        }
+        else {
+                activity2[i,5]="weekday"    
+        }
+}
+
+activity2$wd <- as.factor(activity2$wd)
+
+str(activity2$wd)
 ```
 
 1. Make a panel plot containing a time series plot (i.e. `type = "l"`) of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
 
-```{r}
+```{r stepsbyweekday}
+plot3 <- activity2 %>% group_by(wd,interval) %>%                         summarise(a_steps=mean(steps,na.rm=T))
 
+ggplot(plot3, aes(x=interval, y=a_steps))+
+        geom_line()+
+        facet_grid(wd~.)+
+        labs(y="Number of steps")
 ```
 
+It looks as if there would be a different pattern in average steps by interval depending on weekdays or weekend.
