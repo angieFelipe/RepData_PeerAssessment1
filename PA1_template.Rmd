@@ -2,7 +2,7 @@
 title: "Reproducible Research: Peer Assessment 1"
 author: "angieFelipe"
 date: "13/2/2018"
-output: html_document
+output: md_document
 keep_md: true
 ---
 
